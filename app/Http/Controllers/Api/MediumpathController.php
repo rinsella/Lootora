@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class MediumpathController extends Controller
 {
-    //https://coin-loot.com/api/mediumpath?pb_method=GET&user_id={user_id}&campaign_id={campaign_id}&campaign_name={campaign_name}&amount={reward}&ip={userIp}
+    //https://lootora.net/api/mediumpath?pb_method=GET&user_id={user_id}&campaign_id={campaign_id}&campaign_name={campaign_name}&amount={reward}&ip={userIp}
     public function callback(Request $request)
     {
         try {

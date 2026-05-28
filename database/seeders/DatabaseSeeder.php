@@ -17,13 +17,13 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         User::create([
-            'username' => 'snake',
-            'email' => 'ziadtallat33@gmail.com',
+            'username' => 'admin',
+            'email' => 'admin@lootora.net',
             'password' => \Hash::make('password'),
-            'registered_ip' => "197.165.233.159",
-            'last_login_ip' => "197.165.233.159",
+            'registered_ip' => "127.0.0.1",
+            'last_login_ip' => "127.0.0.1",
             'last_seen_at' => now(),
-            'user_agent' => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/9",
+            'user_agent' => "Lootora Seeder",
             'is_admin' => true,
         ]);
 

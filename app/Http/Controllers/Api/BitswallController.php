@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class BitswallController extends Controller
 {
-    //https://coin-loot.com/api/bitswall?user_id=[SB1]&campaign_id=[OID]&campaign_name=[ONM]&amount=[CUR]&ip=[IP]&payout=[PAY]
+    //https://lootora.net/api/bitswall?user_id=[SB1]&campaign_id=[OID]&campaign_name=[ONM]&amount=[CUR]&ip=[IP]&payout=[PAY]
     public function callback(Request $request)
     {
         try {

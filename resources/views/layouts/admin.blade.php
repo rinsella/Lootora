@@ -55,17 +55,6 @@
     <body class="horizontal-layout horizontal-menu  navbar-floating footer-static  " data-open="hover"
           data-menu="horizontal-menu" data-col="">
 
-        {{-- CoinHub Banner Sponser --}}
-        <div class="container-fluid position-fixed d-block text-center"
-             style="background-color: #01c853 !important; z-index: 99999; padding-bottom: 5px">
-            <a
-                style="color: #ffffff; font-size: 16px; font-weight: 700; margin-left: 10px; text-decoration: none;"
-                href="https://coinhub.ziadt.dev"
-                target="_blank">
-                🚀 Discover the Future of Finance at CoinHub! <span style="margin-left: 5px;">Learn More <i class="fa fa-arrow-right"></i></span>
-            </a>
-        </div>
-
         <!-- BEGIN: Header-->
         <nav
             class="header-navbar navbar-expand-lg navbar navbar-fixed align-items-center navbar-shadow navbar-brand-center" style="top: 25px"
@@ -313,9 +302,7 @@
             <footer class="footer footer-static footer-light footer-shadow" style="padding: 0">
                 <p class="clearfix mb-0 text-center">
                     <span class=" d-block d-md-inline-block mt-25">
-                        <i data-feather="chevrons-left"></i>
-                        Developed by <a href="https://wa.me/+201127070346" target="_blank">Ziad Talaat</a><i
-                            data-feather="chevrons-right"></i>
+                        &copy; {{ date('Y') }} {{ config('app.name', 'Lootora') }}.net — All rights reserved.
                     </span>
                 </p>
             </footer>

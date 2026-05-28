@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class AdwallgateController extends Controller
 {
-    //https://coin-loot.com/api/adwallgate?user_id={subId}&amount={reward}&ip={userIp}&payout={payout}
+    //https://lootora.net/api/adwallgate?user_id={subId}&amount={reward}&ip={userIp}&payout={payout}
     public function callback(Request $request)
     {
         try {

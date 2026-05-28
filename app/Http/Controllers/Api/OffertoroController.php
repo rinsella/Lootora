@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class OffertoroController extends Controller
 {
-    //https://coin-loot.com/api/offertoro?user_id={user_id}&campaign_id={oid}&campaign_name={o_name}&amount={amount}&ip={ip_address}&payout={payout}
+    //https://lootora.net/api/offertoro?user_id={user_id}&campaign_id={oid}&campaign_name={o_name}&amount={amount}&ip={ip_address}&payout={payout}
     public function callback(Request $request)
     {
         try {

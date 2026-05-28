@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class AdgemController extends Controller
 {
-    //https://coin-loot.com/api/adgem?user_id={player_id}&campaign_id={campaign_id}&campaign_name={campaign_name}&amount={amount}&ip={ip}&payout={payout}
+    //https://lootora.net/api/adgem?user_id={player_id}&campaign_id={campaign_id}&campaign_name={campaign_name}&amount={amount}&ip={ip}&payout={payout}
     public function callback(Request $request)
     {
         try {

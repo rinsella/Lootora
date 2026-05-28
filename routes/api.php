@@ -36,4 +36,10 @@ Route::get('/monlix', [App\Http\Controllers\Api\MonlixController::class, 'callba
 Route::get('/notik', [App\Http\Controllers\Api\NotikController::class, 'callback']);
 Route::get('/cpxresearch', [App\Http\Controllers\Api\CPXResearchController::class, 'callback']);
 
+// Generic Lootora postback endpoint — new providers should point here:
+//   https://lootora.net/api/postback/{provider_slug}
+Route::any('/postback/{provider}', [App\Http\Controllers\Api\PostbackController::class, 'handle'])
+    ->middleware('throttle:120,1')
+    ->where('provider', '[A-Za-z0-9_-]+');
+
 

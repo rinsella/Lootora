@@ -70,7 +70,26 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        Avatar::create($data['username'])->save(storage_path("app/public") . "/avatars/{$data['username']}.png", 100);
+        // Try to generate a local avatar; skip silently if GD/Imagick missing.
+        try {
+            Avatar::create($data['username'])->save(storage_path("app/public") . "/avatars/{$data['username']}.png", 100);
+            $avatarPath = "avatars/{$data['username']}.png";
+        } catch (\Throwable $e) {
+            $avatarPath = null;
+        }
+
+        // Capture referral code from query / session / cookie (set by GET /register?ref=CODE)
+        $referredBy = null;
+        $refCode    = $data['ref']
+            ?? request()->query('ref')
+            ?? request()->cookie('lootora_ref')
+            ?? null;
+        if ($refCode) {
+            $referrer = User::where('referral_code', strtoupper(trim($refCode)))->first();
+            if ($referrer) {
+                $referredBy = $referrer->id;
+            }
+        }
 
         return User::create([
             'username' => $data['username'],
@@ -80,7 +99,8 @@ class RegisterController extends Controller
             'last_login_ip' => ip(),
             'last_seen_at' => now(),
             'user_agent' => \request()->userAgent(),
-            'profile_photo_path' => "avatars/{$data['username']}.png",
+            'profile_photo_path' => $avatarPath,
+            'referred_by' => $referredBy,
         ]);
     }
 

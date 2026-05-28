@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class AdscendmediaController extends Controller
 {
-    //https://coin-loot.com/api/adscendmedia?user_id=[SB1]&campaign_id=[OID]&campaign_name=[ONM]&amount=[CUR]&ip=[IP]&payout=[PAY]
+    //https://lootora.net/api/adscendmedia?user_id=[SB1]&campaign_id=[OID]&campaign_name=[ONM]&amount=[CUR]&ip=[IP]&payout=[PAY]
     public function callback(Request $request)
     {
         try {

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class CPXResearchController extends Controller
 {
-    //https://coin-loot.com/api/cpxresearch?user_id={user_id}&campaign_id={offer_ID}&amount={amount_local}&ip={ip_click}&payout={amount_usd}
+    //https://lootora.net/api/cpxresearch?user_id={user_id}&campaign_id={offer_ID}&amount={amount_local}&ip={ip_click}&payout={amount_usd}
     public function callback(Request $request)
     {
         try {

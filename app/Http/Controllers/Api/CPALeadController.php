@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class CPALeadController extends Controller
 {
-    //https://coin-loot.com/api/cpalead?user_id={subid}&campaign_id={campaign_id}&campaign_name={campaign_name}&amount={virtual_currency}&ip={ip_address}&payout={payout}
+    //https://lootora.net/api/cpalead?user_id={subid}&campaign_id={campaign_id}&campaign_name={campaign_name}&amount={virtual_currency}&ip={ip_address}&payout={payout}
     public function callback(Request $request)
     {
         try {

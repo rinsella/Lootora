@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\User\AlertsController;
+use App\Http\Controllers\User\CheckinController;
 use App\Http\Controllers\User\EarnController;
 use App\Http\Controllers\User\HistoryController;
 use App\Http\Controllers\User\HomeController;
@@ -8,6 +10,7 @@ use App\Http\Controllers\User\LiveLeadsController;
 use App\Http\Controllers\User\SettingsController;
 use App\Http\Controllers\User\ShopController;
 use App\Http\Controllers\User\TransactionsController;
+use App\Http\Controllers\User\WalletController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -15,11 +18,6 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
 */
 
 Auth::routes(['verify' => false]);
@@ -57,6 +55,13 @@ Route::middleware(['auth', 'not_banned', 'not_changed_ip'])->group(function () {
     Route::get('/live-leads', [LiveLeadsController::class, 'index'])->name('user.live-leads');
     Route::get('/history', [HistoryController::class, 'index'])->name('user.history');
     Route::view('/proxy', 'user.proxy')->name('user.proxy');
+
+    // Lootora new pages
+    Route::get('/wallet', [WalletController::class, 'index'])->name('user.wallet');
+    Route::get('/alerts', [AlertsController::class, 'index'])->name('user.alerts');
+    Route::post('/checkin', [CheckinController::class, 'store'])
+        ->middleware('throttle:5,1')
+        ->name('user.checkin');
 });
 
 

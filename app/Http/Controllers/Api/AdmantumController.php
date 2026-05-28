@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class AdmantumController extends Controller
 {
-    //https://coin-loot.com/api/admantum?user_id={player_id}&campaign_id={campaign_id}&campaign_name={campaign_name}&amount={amount}&ip={ip}&payout={payout}
+    //https://lootora.net/api/admantum?user_id={player_id}&campaign_id={campaign_id}&campaign_name={campaign_name}&amount={amount}&ip={ip}&payout={payout}
     public function callback(Request $request)
     {
         try {

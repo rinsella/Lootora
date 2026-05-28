@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class RevenueController extends Controller
 {
-    //https://coin-loot.com/api/revenue?user_id=$uid$&campaign_id=$campaign$&campaign_name=$name$&amount=$currency$&ip=$ip$&payout=$rate$
+    //https://lootora.net/api/revenue?user_id=$uid$&campaign_id=$campaign$&campaign_name=$name$&amount=$currency$&ip=$ip$&payout=$rate$
     public function callback(Request $request)
     {
         try {

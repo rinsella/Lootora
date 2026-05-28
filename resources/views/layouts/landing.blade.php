@@ -10,7 +10,7 @@
                 "@context": "http://www.schema.org",
                 "@type": "WebSite",
                 "name": "{{ config('app.name') }}",
-            "alternateName": "coupons, cash back, cash app, Paid Online Surveys, Free Gift Cards, promo codes, offers, discounts, deals, coupon codes, timebucks, swagbucks, earn by click, paid by click, referral earn money online, earn money watching videos, click to pay earn money, make money signing up, easy earn, withdraw paypal, withdraw bitcoin, fast pay, easy offers, free game card, freefire gift, pubg gift, free gift card, fast earn, minimun withdraw, payperclick, surveys, make money online, CPA, CPL, CPV, ways to earn money, earn cash online,take surveys and make money,free online survey jobs,money surveys,earn survey,best online survey sites,best surveys to earn money,take surveys for money,get paid surveys,paid surveys scams,get paid for surveys,take surveys for cash,take surveys,survey sites to make money,cash for surveys,online survey for money,paid survey online,get paid for online surveys,paid to take surveys,best online surveys to make money,online survey rewards,best surveys for money,pay me for surveys,the best online surveys for money,which online surveys pay the most,top survey sites to earn money",
+            "alternateName": "lootora, loot points, rewards, surveys, offers, missions, cashback, gift cards, paypal payout, usdt payout, dana, ovo, gopay, bank transfer",
             "url": "{{ config('app.url') }}"
         }
         </script>
@@ -22,16 +22,16 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="keywords"
-              content="coupons, cash back, cash app, Paid Online Surveys, Free Gift Cards, promo codes, offers, discounts, deals, coupon codes, timebucks, swagbucks, earn by click, paid by click, referral earn money online, earn money watching videos, click to pay earn money, make money signing up, easy earn, withdraw paypal, withdraw bitcoin, fast pay, easy offers, free game card, freefire gift, pubg gift, free gift card, fast earn, minimun withdraw, payperclick, surveys, make money online, CPA, CPL, CPV, ways to earn money, earn cash online,take surveys and make money,free online survey jobs,money surveys,earn survey,best online survey sites,best surveys to earn money,take surveys for money,get paid surveys,paid surveys scams,get paid for surveys,take surveys for cash,take surveys,survey sites to make money,cash for surveys,online survey for money,paid survey online,get paid for online surveys,paid to take surveys,best online surveys to make money,online survey rewards,best surveys for money,pay me for surveys,the best online surveys for money,which online surveys pay the most,top survey sites to earn money">
+              content="lootora, loot points, rewards, surveys, offers, missions, daily check-in, referral rewards, cashback, gift cards, paypal payout, usdt payout, dana, ovo, gopay">
         <meta name="description"
-              content="Earn FREE Gift Rewards 2021 And Free Stuff Cards by Searching Make Surveys, Answering Surveys, and more at {{ config('app.name') }}. Paid Online Surveys.">
+              content="Complete missions, earn LOOT Points and unlock your loot at {{ config('app.name') }}. Surveys, offers, games and daily missions with real rewards.">
         <meta property="og:locale" content="en_US">
         <meta property="og:type" content="website">
-        <meta property="og:title" content="{{ config('app.name') }}: Paid Online Surveys &amp; Free Gift Cards">
+        <meta property="og:title" content="{{ config('app.name') }} — Complete missions. Earn rewards.">
         <meta property="og:description"
-              content="Earn rewards and free stuff by searching and shopping online, answering surveys, and more at {{ config('app.name') }}, a customer loyalty rewards program. Be rewarded today.">
+              content="Complete missions, earn LOOT Points and unlock your loot at {{ config('app.name') }}. Surveys, offers, games and daily missions with real rewards.">
         <meta property="og:url" content="{{ config('app.url') }}">
-        <meta property="og:site_name" content="{{ config('app.name') }}: Paid Online Surveys &amp; Free Gift Cards">
+        <meta property="og:site_name" content="{{ config('app.name') }}">
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:creator" content="{{ '@' . config('app.name') }}">
         <meta name="twitter:site" content="{{'@' . config('app.name') }}">
@@ -132,17 +132,14 @@
                 <nav class="navbar navbar-sticky navbar-expand-lg flex-column" id="primary-menu"
                      style="background-color: #161d31">
 
-                    {{-- CoinHub Banner Sponser --}}
+                    {{-- Lootora announcement banner --}}
                     <div class="container-fluid position-static d-block mb-2"
-                         style="background-color: #01c853 !important; z-index: 99999">
+                         style="background-color: #16A34A !important; z-index: 99999">
                         <div class="container p-2">
-                            <a
-                                class=""
-                                style="color: #ffffff; font-size: 16px; font-weight: 700; margin-left: 10px; text-decoration: none;"
-                                href="https://coinhub.ziadt.dev"
-                                target="_blank">
-                                🚀 Discover the Future of Finance at CoinHub! <span style="margin-left: 5px;">Learn More <i class="fa fa-arrow-right"></i></span>
-                            </a>
+                            <span
+                                style="color: #ffffff; font-size: 16px; font-weight: 700; margin-left: 10px;">
+                                🎁 Welcome to Lootora — complete missions, earn rewards, unlock your loot.
+                            </span>
                         </div>
                     </div>
 
@@ -230,9 +227,7 @@
                                              alt="{{ config('app.name') }}"/>
                                     </a>
                                 </div>
-                                <p>Best platform for earning money online and get gift cards by completing offers,
-                                    surveys, play
-                                    games and watching videos..</p>
+                                <p>Lootora is a modern rewards platform. Complete missions, earn LOOT Points, and withdraw via your favourite payout method. Rewards depend on provider availability, eligibility, and successful completion verification.</p>
                             </div>
 
                             <div class="col-12 col-md-6 col-lg-3">
@@ -251,8 +246,8 @@
                                     <h6 class="widget-title">Contact Us</h6>
                                     <ul class="list-unstyled">
                                         <li>
-                                            <a href="mailto:support@coin-loot.com" style="text-transform: none;">
-                                                support@coin-loot.com
+                                            <a href="mailto:support@lootora.net" style="text-transform: none;">
+                                                support@lootora.net
                                             </a>
                                         </li>
                                     </ul>
@@ -264,8 +259,8 @@
                                     <h6 class="widget-title">Our Social Media</h6>
                                     <ul class="list-unstyled">
                                         <li>
-                                            <a href="https://www.facebook.com/Free-loot-106538708675440/">
-                                                <i class="fab fa-facebook-f"></i> Facebook
+                                            <a href="https://lootora.net">
+                                                <i class="fab fa-globe"></i> lootora.net
                                             </a>
                                         </li>
                                     </ul>
@@ -285,9 +280,7 @@
                             <div class="col-12 col-md-12 col-lg-12 text--center">
                                 <div class="footer-copyright">
                             <span>
-                                {{ date('Y') }} &copy;
-                                <a href="https://www.facebook.com/snake2019">Ziad Talaat</a>
-                                . All rights reserved.
+                                &copy; {{ date('Y') }} {{ config('app.name', 'Lootora') }}.net — All rights reserved.
                             </span>
                                 </div>
                             </div>
