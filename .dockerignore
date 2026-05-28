@@ -1,0 +1,65 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+.github
+
+# IDE
+.vscode
+.idea
+*.swp
+
+# Dev tooling
+.editorconfig
+.styleci.yml
+phpunit.xml
+tests
+README.md
+LICENSE
+Makefile
+
+# Local environments
+.env
+.env.local
+.env.testing
+.env.backup
+
+# Composer / Node — installed inside build stages
+vendor
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Caches & runtime artifacts
+storage/logs/*
+!storage/logs/.gitignore
+storage/framework/cache/*
+!storage/framework/cache/.gitignore
+storage/framework/sessions/*
+!storage/framework/sessions/.gitignore
+storage/framework/views/*
+!storage/framework/views/.gitignore
+storage/framework/testing/*
+!storage/framework/testing/.gitignore
+storage/debugbar
+bootstrap/cache/*.php
+
+# Local DB
+database/*.sqlite
+database/*.sqlite-journal
+
+# Build artifacts that should be regenerated in stage 2
+public/hot
+public/storage
+public/css/app.css
+public/js/app.js
+public/mix-manifest.json
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Docker meta (not needed inside image)
+docker-compose*.yml
+Dockerfile
+.dockerignore

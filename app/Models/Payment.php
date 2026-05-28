@@ -25,6 +25,11 @@ class Payment extends Model
         return null;
     }
 
+    public function hasLogo(): bool
+    {
+        return $this->logoUrl() !== null;
+    }
+
     public function initials(): string
     {
         $name = trim((string) $this->name);

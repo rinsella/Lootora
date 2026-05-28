@@ -2,43 +2,23 @@
 
 namespace Database\Seeders;
 
-use App\Models\Bonus;
-use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-        User::create([
-            'username' => 'admin',
-            'email' => 'admin@lootora.net',
-            'password' => \Hash::make('password'),
-            'registered_ip' => "127.0.0.1",
-            'last_login_ip' => "127.0.0.1",
-            'last_seen_at' => now(),
-            'user_agent' => "Lootora Seeder",
-            'is_admin' => true,
+        $this->call([
+            AdminUserSeeder::class,
+            PayoutMethodSeeder::class,
+            SiteSettingsSeeder::class,
+            BonusSeeder::class,
         ]);
 
-        Payment::create([
-            'name' => 'PayPal',
-            'currency' => 'USD',
-            'photo_path' => 'payments/paypal.png',
-        ]);
-
-        Bonus::create([
-            'code' => 'WELCOME200',
-            'points' => 200,
-            'max_uses' => 5,
-        ]);
-
-        User::factory(100)->create();
+        // Optional dev fixtures — only seed if we have very few users
+        if (User::count() <= 1 && app()->environment(['local', 'development'])) {
+            User::factory(20)->create();
+        }
     }
 }

@@ -56,11 +56,11 @@
             @endphp
             <div class="rounded-2xl bg-white border border-loot-border p-5 shadow-soft hover:shadow-cardLg transition flex flex-col">
                 <div class="flex items-start gap-3">
-                    @if(!empty($offerwall->photo_path))
-                        <img src="{{ Storage::url($offerwall->photo_path) }}" alt="{{ $offerwall->name }}" class="w-12 h-12 rounded-xl object-cover border border-loot-border">
+                    @if($offerwall->hasLogo())
+                        <img src="{{ $offerwall->logoUrl() }}" alt="{{ $offerwall->name }}" class="w-12 h-12 rounded-xl object-cover border border-loot-border">
                     @else
-                        <div class="w-12 h-12 rounded-xl bg-emerald-50 text-loot-primary grid place-items-center text-xl font-extrabold">
-                            {{ strtoupper(substr($offerwall->name ?? '?', 0, 1)) }}
+                        <div class="w-12 h-12 rounded-xl gradient-loot text-white grid place-items-center text-sm font-extrabold">
+                            {{ $offerwall->initials() }}
                         </div>
                     @endif
                     <div class="flex-1 min-w-0">

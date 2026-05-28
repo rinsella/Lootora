@@ -183,4 +183,120 @@
     </div>
 </div>
 
+{{-- ===== SYSTEM HEALTH + DEPLOYMENT ===== --}}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+    <div class="rounded-2xl bg-white border border-loot-border shadow-soft p-5">
+        <h3 class="font-bold text-loot-ink mb-3">System Health</h3>
+        @php
+            $row = function($label, $ok, $value=null) {
+                $cls = $ok ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700';
+                $icon = $ok ? '✓' : '✗';
+                return [$label, $cls, $icon, $value];
+            };
+            $rows = [
+                $row('Database', $systemHealth['db_connected']),
+                $row('Storage symlink', $systemHealth['storage_linked']),
+                $row('Storage writable', $systemHealth['storage_writable']),
+                $row('Bootstrap cache writable', $systemHealth['bootstrap_writable']),
+                $row('Debug mode OFF (prod safe)', !$systemHealth['app_debug']),
+            ];
+        @endphp
+        <ul class="text-sm divide-y divide-loot-border">
+            @foreach($rows as [$label, $cls, $icon, $value])
+                <li class="flex items-center justify-between py-2">
+                    <span class="text-loot-ink">{{ $label }}</span>
+                    <span class="text-xs font-bold px-2 py-0.5 rounded-full {{ $cls }}">{{ $icon }}</span>
+                </li>
+            @endforeach
+            <li class="flex items-center justify-between py-2">
+                <span class="text-loot-muted text-xs">Queue / Cache / Mail</span>
+                <span class="text-xs font-mono text-loot-ink">{{ $systemHealth['queue_connection'] }} / {{ $systemHealth['cache_driver'] }} / {{ $systemHealth['mail_driver'] }}</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="rounded-2xl bg-white border border-loot-border shadow-soft p-5">
+        <h3 class="font-bold text-loot-ink mb-3">Deployment</h3>
+        <dl class="text-sm divide-y divide-loot-border">
+            <div class="flex justify-between py-2"><dt class="text-loot-muted">PHP</dt><dd class="font-mono text-loot-ink">{{ $deployment['php_version'] }}</dd></div>
+            <div class="flex justify-between py-2"><dt class="text-loot-muted">Laravel</dt><dd class="font-mono text-loot-ink">{{ $deployment['laravel_version'] }}</dd></div>
+            <div class="flex justify-between py-2"><dt class="text-loot-muted">App env</dt><dd class="font-mono text-loot-ink">{{ $systemHealth['app_env'] }}</dd></div>
+            <div class="flex justify-between py-2"><dt class="text-loot-muted">App URL</dt><dd class="font-mono text-loot-ink text-xs truncate max-w-[60%]">{{ $deployment['app_url'] }}</dd></div>
+            <div class="flex justify-between py-2"><dt class="text-loot-muted">Filesystem</dt><dd class="font-mono text-loot-ink">{{ $deployment['filesystem'] }}</dd></div>
+            <div class="flex justify-between py-2"><dt class="text-loot-muted">Timezone</dt><dd class="font-mono text-loot-ink">{{ $deployment['timezone'] }}</dd></div>
+        </dl>
+    </div>
+</div>
+
+{{-- ===== PROVIDER INTEGRATION + PAYOUT SUMMARY ===== --}}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+    <div class="rounded-2xl bg-white border border-loot-border shadow-soft p-5">
+        <h3 class="font-bold text-loot-ink mb-3">Provider Integration</h3>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+            <div class="rounded-xl bg-emerald-50 p-3"><p class="text-loot-muted text-xs">Active</p><p class="font-extrabold text-emerald-700 text-lg">{{ $providerIntegration['active'] }}</p></div>
+            <div class="rounded-xl bg-gray-50 p-3"><p class="text-loot-muted text-xs">Inactive</p><p class="font-extrabold text-loot-ink text-lg">{{ $providerIntegration['inactive'] }}</p></div>
+            <div class="rounded-xl {{ $providerIntegration['missing_template'] > 0 ? 'bg-amber-50' : 'bg-gray-50' }} p-3"><p class="text-loot-muted text-xs">Missing URL template</p><p class="font-extrabold text-lg {{ $providerIntegration['missing_template'] > 0 ? 'text-amber-700' : 'text-loot-ink' }}">{{ $providerIntegration['missing_template'] }}</p></div>
+            <div class="rounded-xl {{ $providerIntegration['missing_secret'] > 0 ? 'bg-rose-50' : 'bg-gray-50' }} p-3"><p class="text-loot-muted text-xs">Missing postback secret</p><p class="font-extrabold text-lg {{ $providerIntegration['missing_secret'] > 0 ? 'text-rose-700' : 'text-loot-ink' }}">{{ $providerIntegration['missing_secret'] }}</p></div>
+            <div class="rounded-xl {{ $providerIntegration['missing_logo'] > 0 ? 'bg-amber-50' : 'bg-gray-50' }} p-3 col-span-2"><p class="text-loot-muted text-xs">Active providers missing logo</p><p class="font-extrabold text-lg {{ $providerIntegration['missing_logo'] > 0 ? 'text-amber-700' : 'text-loot-ink' }}">{{ $providerIntegration['missing_logo'] }}</p></div>
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-white border border-loot-border shadow-soft p-5">
+        <h3 class="font-bold text-loot-ink mb-3">Payout Summary</h3>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+            <div class="rounded-xl bg-emerald-50 p-3"><p class="text-loot-muted text-xs">Active methods</p><p class="font-extrabold text-emerald-700 text-lg">{{ $payoutSummary['methods_active'] }} / {{ $payoutSummary['methods_total'] }}</p></div>
+            <div class="rounded-xl bg-amber-50 p-3"><p class="text-loot-muted text-xs">Pending</p><p class="font-extrabold text-amber-700 text-lg">{{ $payoutSummary['pending_count'] }}</p><p class="text-[10px] text-loot-muted">{{ number_format($payoutSummary['pending_points'], 0) }} pts</p></div>
+            <div class="rounded-xl bg-blue-50 p-3"><p class="text-loot-muted text-xs">Paid</p><p class="font-extrabold text-blue-700 text-lg">{{ $payoutSummary['paid_count'] }}</p><p class="text-[10px] text-loot-muted">{{ number_format($payoutSummary['paid_points'], 0) }} pts</p></div>
+            <div class="rounded-xl bg-rose-50 p-3"><p class="text-loot-muted text-xs">Rejected</p><p class="font-extrabold text-rose-700 text-lg">{{ $payoutSummary['rejected_count'] }}</p></div>
+        </div>
+    </div>
+</div>
+
+{{-- ===== RECENT ADMIN ACTIONS + SETUP CHECKLIST ===== --}}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6 mb-6">
+    <div class="rounded-2xl bg-white border border-loot-border shadow-soft">
+        <div class="px-5 py-4 border-b border-loot-border"><h3 class="font-bold text-loot-ink">Recent Admin Actions</h3></div>
+        <div class="divide-y divide-loot-border">
+            @forelse($recentAdminActions as $a)
+                <div class="px-5 py-3 text-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-loot-ink">{{ $a->action }}</span>
+                        <span class="text-[10px] text-loot-muted">{{ $a->created_at?->diffForHumans() }}</span>
+                    </div>
+                    <p class="text-xs text-loot-muted">admin#{{ $a->admin_id }} @if($a->target_user_id) → user#{{ $a->target_user_id }} @endif @if($a->ip_address) · {{ $a->ip_address }} @endif</p>
+                </div>
+            @empty
+                <div class="px-5 py-10 text-center text-sm text-loot-muted">No admin actions recorded yet.</div>
+            @endforelse
+        </div>
+    </div>
+
+    <div class="rounded-2xl bg-white border border-loot-border shadow-soft p-5">
+        <h3 class="font-bold text-loot-ink mb-3">Setup Checklist</h3>
+        <ul class="text-sm divide-y divide-loot-border">
+            @foreach([
+                'env_file' => '.env file present',
+                'app_key' => 'APP_KEY generated',
+                'db_connected' => 'Database connected',
+                'storage_linked' => 'public/storage symlinked',
+                'admin_user' => 'Admin user exists',
+                'payout_methods' => 'At least 1 active payout method',
+                'site_name_set' => 'Site name configured',
+                'at_least_1_provider' => 'At least 1 active provider',
+                'queue_not_sync' => 'Queue not running on sync',
+                'debug_off' => 'APP_DEBUG=false (production)',
+            ] as $k => $label)
+                <li class="flex items-center justify-between py-2">
+                    <span class="text-loot-ink">{{ $label }}</span>
+                    @if($setupChecklist[$k])
+                        <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">✓ done</span>
+                    @else
+                        <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700">⚠ todo</span>
+                    @endif
+                </li>
+            @endforeach
+        </ul>
+    </div>
+</div>
+
 @endsection

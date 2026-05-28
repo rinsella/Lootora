@@ -104,6 +104,16 @@
                                     <input type="hidden" name="note" value="">
                                     <button class="text-xs font-bold text-rose-600 hover:underline">Reject</button>
                                 </form>
+                            @elseif($w->status === 'paid')
+                                <span class="text-[10px] text-loot-primary font-bold">✓ paid</span>
+                                @if(\Schema::hasColumn('withdrawals','paid_at') && $w->paid_at)
+                                    <p class="text-[10px] text-loot-muted">{{ $w->paid_at }}</p>
+                                @endif
+                            @elseif($w->status === 'rejected')
+                                <span class="text-[10px] text-rose-600 font-bold">✗ rejected</span>
+                                @if(\Schema::hasColumn('withdrawals','refunded_at') && $w->refunded_at)
+                                    <p class="text-[10px] text-loot-muted">refunded</p>
+                                @endif
                             @else
                                 <span class="text-xs text-loot-muted">—</span>
                             @endif

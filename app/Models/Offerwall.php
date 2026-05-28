@@ -15,6 +15,11 @@ class Offerwall extends Model
         'sort_order' => 'integer',
     ];
 
+    public function hasLogo(): bool
+    {
+        return $this->logoUrl() !== null;
+    }
+
     public function logoUrl(): ?string
     {
         if (!empty($this->photo_path) && Storage::disk('public')->exists($this->photo_path)) {

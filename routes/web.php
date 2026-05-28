@@ -22,6 +22,25 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(['verify' => false]);
 
+// Healthcheck for Docker / uptime monitors — no auth, no secrets
+Route::get('/health', function () {
+    $dbOk = false;
+    try {
+        \DB::connection()->getPdo();
+        $dbOk = true;
+    } catch (\Throwable $e) {
+        $dbOk = false;
+    }
+    $storageOk = is_link(public_path('storage')) || is_dir(public_path('storage'));
+    return response()->json([
+        'status'   => ($dbOk && $storageOk) ? 'ok' : 'degraded',
+        'app'      => config('app.name', 'Lootora'),
+        'time'     => now()->toIso8601String(),
+        'database' => $dbOk ? 'ok' : 'fail',
+        'storage'  => $storageOk ? 'ok' : 'fail',
+    ], ($dbOk && $storageOk) ? 200 : 503);
+})->name('health');
+
 // Landing routes
 Route::view('/', 'landing.home')->name('home');
 Route::view('/faq', 'landing.faq')->name('faq');

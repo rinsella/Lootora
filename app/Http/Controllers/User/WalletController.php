@@ -67,7 +67,7 @@ class WalletController extends Controller
             ? trim($data['account_name']).' · '.$accountField
             : $accountField;
 
-        DB::transaction(function () use ($user, $amount, $method, $accountDisplay, $request) {
+        DB::transaction(function () use ($user, $amount, $method, $accountDisplay, $accountField, $data, $request) {
             $u = User::lockForUpdate()->find($user->id);
             if ((float) $u->current_points < $amount) {
                 abort(422, 'Insufficient balance.');
@@ -81,6 +81,13 @@ class WalletController extends Controller
             $w->amount  = $amount;
             $w->account = $accountDisplay;
             $w->status  = 'pending';
+            if (Schema::hasColumn('withdrawals', 'payout_method_id'))   $w->payout_method_id = $method->id;
+            if (Schema::hasColumn('withdrawals', 'account_name') && !empty($data['account_name'])) {
+                $w->account_name = trim($data['account_name']);
+            }
+            if (Schema::hasColumn('withdrawals', 'account_identifier')) {
+                $w->account_identifier = $accountField;
+            }
             if (Schema::hasColumn('withdrawals', 'ip')) {
                 $w->ip = $request->ip();
             }

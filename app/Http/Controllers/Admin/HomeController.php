@@ -3,15 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminActionLog;
 use App\Models\FraudLog;
 use App\Models\Lead;
 use App\Models\Offerwall;
+use App\Models\Payment;
 use App\Models\PostbackLog;
 use App\Models\ProviderTransaction;
+use App\Models\SiteSetting;
 use App\Models\User;
 use App\Models\Withdrawal;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -75,6 +80,91 @@ class HomeController extends Controller
             'total'  => $hasFL ? FraudLog::count() : 0,
         ];
 
-        return view('admin.home', compact('users','rev','withdrawals','providers','postbacks','fraud'));
+        // ===== SYSTEM HEALTH =====
+        $dbOk = false;
+        try { DB::connection()->getPdo(); $dbOk = true; } catch (\Throwable $e) { $dbOk = false; }
+        $storageLinked = is_link(public_path('storage')) || is_dir(public_path('storage'));
+        $storageWritable = is_writable(storage_path('app/public')) || is_writable(storage_path('app'));
+        $bootstrapWritable = is_writable(base_path('bootstrap/cache'));
+
+        $systemHealth = [
+            'app_env'           => config('app.env'),
+            'app_debug'         => (bool) config('app.debug'),
+            'queue_connection'  => config('queue.default'),
+            'cache_driver'      => config('cache.default'),
+            'mail_driver'       => config('mail.default') ?? config('mail.driver'),
+            'db_connected'      => $dbOk,
+            'storage_linked'    => $storageLinked,
+            'storage_writable'  => $storageWritable,
+            'bootstrap_writable'=> $bootstrapWritable,
+        ];
+
+        // ===== DEPLOYMENT STATUS =====
+        $deployment = [
+            'php_version'      => PHP_VERSION,
+            'laravel_version'  => app()->version(),
+            'app_url'          => config('app.url'),
+            'filesystem'       => config('filesystems.default'),
+            'timezone'         => config('app.timezone'),
+            'env_file_present' => file_exists(base_path('.env')),
+        ];
+
+        // ===== PROVIDER INTEGRATION SUMMARY =====
+        $missingTemplate = Schema::hasColumn('offerwalls', 'iframe_url_template')
+            ? Offerwall::where('is_active', 1)->where(function ($q) {
+                $q->whereNull('iframe_url_template')->orWhere('iframe_url_template', '');
+            })->count() : 0;
+        $missingSecret = Schema::hasColumn('offerwalls', 'postback_secret')
+            ? Offerwall::where('is_active', 1)->where(function ($q) {
+                $q->whereNull('postback_secret')->orWhere('postback_secret', '');
+            })->count() : 0;
+        $missingLogo = 0;
+        foreach (Offerwall::where('is_active', 1)->get() as $ow) {
+            if (!$ow->hasLogo()) $missingLogo++;
+        }
+        $providerIntegration = [
+            'active'           => $providers['active'],
+            'inactive'         => max(0, $providers['total'] - $providers['active']),
+            'missing_template' => $missingTemplate,
+            'missing_secret'   => $missingSecret,
+            'missing_logo'     => $missingLogo,
+        ];
+
+        // ===== PAYOUT SUMMARY =====
+        $payoutSummary = [
+            'methods_active'  => Payment::where('is_active', 1)->count(),
+            'methods_total'   => Payment::count(),
+            'pending_count'   => Withdrawal::where('status', 'pending')->count(),
+            'pending_points'  => (float) Withdrawal::where('status', 'pending')->sum('amount'),
+            'paid_count'      => Withdrawal::where('status', 'paid')->count(),
+            'paid_points'     => (float) Withdrawal::where('status', 'paid')->sum('amount'),
+            'rejected_count'  => Withdrawal::where('status', 'rejected')->count(),
+        ];
+
+        // ===== RECENT ADMIN ACTIONS =====
+        $recentAdminActions = Schema::hasTable('admin_action_logs')
+            ? AdminActionLog::orderByDesc('created_at')->take(10)->get()
+            : collect();
+
+        // ===== SETUP CHECKLIST =====
+        $hasSiteSettings = Schema::hasTable('site_settings');
+        $setupChecklist = [
+            'env_file'         => $deployment['env_file_present'],
+            'app_key'          => !empty(config('app.key')),
+            'db_connected'     => $dbOk,
+            'storage_linked'   => $storageLinked,
+            'admin_user'       => Schema::hasColumn('users','is_admin') ? User::where('is_admin', 1)->exists() : false,
+            'payout_methods'   => Payment::where('is_active', 1)->exists(),
+            'site_name_set'    => $hasSiteSettings ? (SiteSetting::where('key','loot_site_name')->exists()) : false,
+            'at_least_1_provider' => Offerwall::where('is_active', 1)->exists(),
+            'queue_not_sync'   => config('queue.default') !== 'sync',
+            'debug_off'        => !((bool) config('app.debug')),
+        ];
+
+        return view('admin.home', compact(
+            'users','rev','withdrawals','providers','postbacks','fraud',
+            'systemHealth','deployment','providerIntegration','payoutSummary',
+            'recentAdminActions','setupChecklist'
+        ));
     }
 }

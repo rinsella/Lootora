@@ -20,7 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::get('/', function () {
-    return "welcome form snake api";
+    return response()->json([
+        'name'   => 'Lootora API',
+        'status' => 'running',
+        'domain' => config('app.url'),
+    ]);
 });
 
 

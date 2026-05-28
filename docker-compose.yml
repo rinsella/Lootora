@@ -1,0 +1,100 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${DOCKER_IMAGE:-lootora/app:latest}
+    container_name: lootora_app
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - app_storage:/var/www/html/storage
+      - app_public:/var/www/html/public
+    networks:
+      - lootora
+
+  nginx:
+    image: nginx:alpine
+    container_name: lootora_nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - app_public:/var/www/html/public:ro
+      - app_storage:/var/www/html/storage:ro
+    depends_on:
+      - app
+    networks:
+      - lootora
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  mysql:
+    image: mysql:8.0
+    container_name: lootora_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-lootora}
+      MYSQL_USER: ${DB_USERNAME:-lootora}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-lootora_password}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_password}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${DB_ROOT_PASSWORD:-root_password}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - lootora
+
+  queue:
+    image: ${DOCKER_IMAGE:-lootora/app:latest}
+    container_name: lootora_queue
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      app:
+        condition: service_started
+      mysql:
+        condition: service_healthy
+    volumes:
+      - app_storage:/var/www/html/storage
+    command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=60", "--sleep=3"]
+    networks:
+      - lootora
+
+  scheduler:
+    image: ${DOCKER_IMAGE:-lootora/app:latest}
+    container_name: lootora_scheduler
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      app:
+        condition: service_started
+      mysql:
+        condition: service_healthy
+    volumes:
+      - app_storage:/var/www/html/storage
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["while true; do php artisan schedule:run --verbose --no-interaction; sleep 60; done"]
+    networks:
+      - lootora
+
+volumes:
+  mysql_data:
+  app_storage:
+  app_public:
+
+networks:
+  lootora:
+    driver: bridge
