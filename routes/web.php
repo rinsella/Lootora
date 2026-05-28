@@ -57,7 +57,8 @@ Route::middleware(['auth', 'not_banned', 'not_changed_ip'])->group(function () {
     Route::view('/proxy', 'user.proxy')->name('user.proxy');
 
     // Lootora new pages
-    Route::get('/wallet', [WalletController::class, 'index'])->name('user.wallet');
+    Route::get('/wallet',  [WalletController::class, 'index'])->name('user.wallet');
+    Route::post('/wallet/withdraw', [WalletController::class, 'withdraw'])->name('user.wallet.withdraw');
     Route::get('/alerts', [AlertsController::class, 'index'])->name('user.alerts');
     Route::post('/checkin', [CheckinController::class, 'store'])
         ->middleware('throttle:5,1')
