@@ -7,7 +7,9 @@
 # =================================================================
 
 # ---------- Stage 1: composer dependencies ----------
-FROM composer:2 AS vendor
+# Pinned to a composer image bundling PHP 8.2 to match the runtime stage
+# and avoid platform-requirement clashes with newer PHP.
+FROM composer:2.7 AS vendor
 
 WORKDIR /app
 COPY composer.json composer.lock* ./
@@ -19,7 +21,8 @@ RUN composer install \
     --no-autoloader \
     --prefer-dist \
     --no-interaction \
-    --no-progress
+    --no-progress \
+    --ignore-platform-reqs
 
 # ---------- Stage 2: node asset build ----------
 FROM node:20-alpine AS assets
@@ -56,16 +59,11 @@ RUN set -eux; \
     docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp; \
     docker-php-ext-install -j$(nproc) \
         bcmath \
-        ctype \
-        dom \
         gd \
         intl \
-        mbstring \
         opcache \
         pdo \
         pdo_mysql \
-        tokenizer \
-        xml \
         zip; \
     rm -rf /var/cache/apk/*
 
