@@ -1,6 +1,6 @@
 services:
   app:
-    image: ${DOCKER_IMAGE:-lootora/app:latest}
+    image: ${DOCKER_IMAGE:-rinsella619/lootora:latest}
     container_name: lootora_app
     restart: always
     env_file: .env
@@ -51,7 +51,7 @@ services:
       - lootora
 
   queue:
-    image: ${DOCKER_IMAGE:-lootora/app:latest}
+    image: ${DOCKER_IMAGE:-rinsella619/lootora:latest}
     container_name: lootora_queue
     restart: always
     env_file: .env
@@ -70,7 +70,7 @@ services:
       - lootora
 
   scheduler:
-    image: ${DOCKER_IMAGE:-lootora/app:latest}
+    image: ${DOCKER_IMAGE:-rinsella619/lootora:latest}
     container_name: lootora_scheduler
     restart: always
     env_file: .env

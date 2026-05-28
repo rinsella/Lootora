@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ${DOCKER_IMAGE:-lootora/app:latest}
+    image: ${DOCKER_IMAGE:-rinsella619/lootora:latest}
     container_name: lootora_app
     restart: unless-stopped
     env_file: .env
@@ -58,7 +58,7 @@ services:
       - lootora
 
   queue:
-    image: ${DOCKER_IMAGE:-lootora/app:latest}
+    image: ${DOCKER_IMAGE:-rinsella619/lootora:latest}
     container_name: lootora_queue
     restart: unless-stopped
     env_file: .env
@@ -74,7 +74,7 @@ services:
       - lootora
 
   scheduler:
-    image: ${DOCKER_IMAGE:-lootora/app:latest}
+    image: ${DOCKER_IMAGE:-rinsella619/lootora:latest}
     container_name: lootora_scheduler
     restart: unless-stopped
     env_file: .env
