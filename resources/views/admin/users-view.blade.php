@@ -1,6 +1,6 @@
-@extends('layouts.admin')
+@extends('layouts.admin-modern')
 
-@section('title', "View user")
+@section('title', "User profile")
 
 @section('content')
     <div class="row">

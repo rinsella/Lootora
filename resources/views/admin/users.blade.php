@@ -1,6 +1,6 @@
-@extends('layouts.admin')
+@extends('layouts.admin-modern')
 
-@section('title', "Users Manage")
+@section('title', "Users")
 
 @push('css')
     @livewireStyles

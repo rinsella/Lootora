@@ -1,93 +1,42 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
-@section('content')
+@section('title', 'Reset password')
 
-    <!-- BEGIN: Content-->
-    <div class="app-content content ">
-        <div class="content-wrapper">
-            <div class="content-body">
+@section('form')
+    <h1 class="text-2xl sm:text-3xl font-extrabold text-loot-ink">Reset your password</h1>
+    <p class="mt-2 text-sm text-loot-muted">Choose a new password to regain access to your Lootora account.</p>
 
-                <div class="auth-wrapper auth-basic px-2">
-                    <div class="auth-inner my-2">
-                        <div class="card mb-0">
-                            <div class="card-body">
-                                <a href="{{ route('home') }}" class="brand-logo">
-                                    <img src="{{ asset('app-assets/images/logo/logo.png') }}" alt="" width="300px">
-                                </a>
+    <form method="POST" action="{{ route('password.update') }}" class="mt-6 space-y-4">
+        @csrf
+        <input type="hidden" name="token" value="{{ $token }}">
 
-                                <h4 class="card-title mb-1">Reset password</h4>
-
-                                <form method="POST" action="{{ route('password.update') }}"
-                                      class="auth-register-form mt-2">
-                                    @csrf
-
-                                    <input type="hidden" name="token" value="{{ $token }}">
-
-                                    <div class="row mt-1">
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="email" class="form-label">Email Address</label>
-                                                <input type="email"
-                                                       class="form-control @error('email') is-invalid @enderror"
-                                                       id="email" name="email" value="{{ $email ?? old('email') }}"
-                                                       required
-                                                       autocomplete="email" autofocus/>
-
-                                                @error('email')
-                                                <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row mt-1">
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="password" class="form-label">Password</label>
-
-                                                <input type="password"
-                                                       class="form-control @error('password') is-invalid @enderror"
-                                                       id="password" name="password" required
-                                                       autocomplete="new-password"/>
-
-                                                @error('password')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="row mt-1 mb-1">
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="password-confirm" class="form-label">
-                                                    Confirm Password
-                                                </label>
-
-                                                <input type="password"
-                                                       class="form-control"
-                                                       id="password-confirm" name="password_confirmation" required
-                                                       autocomplete="new-password"/>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <button type="submit" class="btn btn-success w-100">Reset Password</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+        <div>
+            <label for="email" class="block text-xs font-semibold text-loot-ink mb-1">Email</label>
+            <input id="email" type="email" name="email" value="{{ $email ?? old('email') }}" required autofocus
+                   class="w-full px-4 py-2.5 rounded-xl border @error('email') border-red-400 @else border-loot-border @enderror focus:outline-none focus:border-loot-primary text-sm">
+            @error('email')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
         </div>
-    </div>
-    <!-- END: Content-->
 
+        <div>
+            <label for="password" class="block text-xs font-semibold text-loot-ink mb-1">New password</label>
+            <input id="password" type="password" name="password" required autocomplete="new-password"
+                   class="w-full px-4 py-2.5 rounded-xl border @error('password') border-red-400 @else border-loot-border @enderror focus:outline-none focus:border-loot-primary text-sm">
+            @error('password')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+        </div>
+
+        <div>
+            <label for="password-confirm" class="block text-xs font-semibold text-loot-ink mb-1">Confirm password</label>
+            <input id="password-confirm" type="password" name="password_confirmation" required autocomplete="new-password"
+                   class="w-full px-4 py-2.5 rounded-xl border border-loot-border focus:outline-none focus:border-loot-primary text-sm">
+        </div>
+
+        <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl gradient-loot text-white font-semibold text-sm shadow-cardLg hover:opacity-95 transition">
+            Reset password →
+        </button>
+    </form>
+
+    <p class="mt-6 text-sm text-center text-loot-muted">
+        Remembered it?
+        <a href="{{ route('login') }}" class="font-semibold text-loot-primary hover:underline">Back to sign in</a>
+    </p>
 @endsection

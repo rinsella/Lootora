@@ -1,101 +1,74 @@
-@extends('layouts.dashboard')
+@extends('layouts.member')
 
 @section('title', 'Settings')
 
 @section('content')
-    <!-- profile -->
-    <div class="card">
-        <div class="card-header border-bottom">
-            <h4 class="card-title">Profile Details</h4>
-        </div>
-        <div class="card-body py-1">
-            <form class="validate-form" method="POST" action="{{ route('user.settings.update') }}"
-                  enctype="multipart/form-data">
-                @csrf
+<div class="rounded-2xl gradient-loot p-6 sm:p-7 text-white shadow-cardLg mb-6">
+    <p class="text-xs uppercase tracking-wider text-emerald-100 font-semibold">Account</p>
+    <h1 class="text-2xl sm:text-3xl font-extrabold mt-1">Profile settings</h1>
+    <p class="text-sm text-emerald-100 mt-1">Update your avatar, email, or password.</p>
+</div>
 
-                @if(session('success'))
-                    <div class="alert alert-success opacity-100">
-                        <div class="alert-body">
-                            <p>{{ session('success') }}</p>
-                        </div>
-                    </div>
-                @endif
+@if(session('success'))
+    <div class="rounded-2xl bg-emerald-50 border border-emerald-100 text-loot-primaryDark px-4 py-3 mb-4 text-sm font-semibold">
+        ✓ {{ session('success') }}
+    </div>
+@endif
 
-                @if (count($errors) > 0)
-                    <div class="alert alert-danger opacity-100">
-                        <div class="alert-body">
-                            @foreach ($errors->all() as $error)
-                                <p>{{ $error }}</p>
-                            @endforeach
-                        </div>
-                    </div>
-                @endif
+@if($errors->any())
+    <div class="rounded-2xl bg-rose-50 border border-rose-100 text-rose-700 px-4 py-3 mb-4 text-sm">
+        @foreach($errors->all() as $error)<p>• {{ $error }}</p>@endforeach
+    </div>
+@endif
 
-                <div class="d-flex">
-                    <a href="#" class="me-25">
-                        <img src="{{ auth()->user()->avatar() }}" id="account-upload-img"
-                             class="uploadedAvatar rounded me-50" alt="profile image" height="100" width="100"/>
-                    </a>
+<form method="POST" action="{{ route('user.settings.update') }}" enctype="multipart/form-data"
+      class="rounded-2xl bg-white border border-loot-border p-5 sm:p-6 shadow-soft">
+    @csrf
 
-                    <div class="d-flex align-items-end mt-75 ms-1">
-                        <div>
-                            <label for="account-upload" class="btn btn-sm btn-success mb-75 me-75">Upload</label>
-                            <input type="file" id="account-upload" hidden accept="image/*" name="image"/>
-                            <button type="button" id="account-reset" class="btn btn-sm btn-outline-secondary mb-75">
-                                Reset
-                            </button>
-                            <p class="mb-0">Allowed file types: png, jpg, jpeg.</p>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="row mt-2 pt-50">
-                    <div class="col-12 col-sm-6 mb-1">
-                        <label class="form-label" for="accountEmail">Email</label>
-                        <input type="email" class="form-control" id="accountEmail" name="email" placeholder="Email"
-                               value="{{ auth()->user()->email }}" disabled/>
-                    </div>
-                    <div class="col-12 col-sm-6 mb-1">
-                        <label class="form-label" for="password">Password</label>
-                        <input type="password" class="form-control" id="password" name="password"
-                               placeholder="********" data-msg=""/>
-                    </div>
-                    <div class="col-12">
-                        <button type="submit" class="btn btn-success mt-1 me-1">Save changes</button>
-                        <button type="reset" class="btn btn-outline-secondary mt-1">Discard</button>
-                    </div>
-                </div>
-            </form>
+    <div class="flex items-center gap-5 pb-5 border-b border-loot-border">
+        <img id="avatar-preview" src="{{ auth()->user()->avatar() }}" alt="" class="w-20 h-20 rounded-2xl object-cover ring-2 ring-loot-border">
+        <div>
+            <label for="account-upload" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl gradient-loot text-white text-sm font-semibold cursor-pointer hover:opacity-90">
+                Upload new photo
+            </label>
+            <input id="account-upload" type="file" name="image" accept="image/*" hidden>
+            <button type="button" id="avatar-reset" class="ml-2 inline-flex items-center px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-sm font-semibold text-loot-ink">Reset</button>
+            <p class="text-xs text-loot-muted mt-2">PNG, JPG or JPEG. Max ~2 MB.</p>
         </div>
     </div>
 
-@endsection
+    <div class="grid sm:grid-cols-2 gap-4 mt-5">
+        <div>
+            <label for="email" class="block text-xs font-semibold text-loot-ink mb-1.5">Email</label>
+            <input id="email" type="email" disabled value="{{ auth()->user()->email }}"
+                   class="w-full rounded-xl border border-loot-border bg-gray-50 px-3.5 py-2.5 text-sm text-loot-muted">
+        </div>
+        <div>
+            <label for="password" class="block text-xs font-semibold text-loot-ink mb-1.5">New password</label>
+            <input id="password" type="password" name="password" placeholder="Leave blank to keep current"
+                   class="w-full rounded-xl border border-loot-border focus:border-loot-primary focus:ring-4 focus:ring-emerald-100 px-3.5 py-2.5 text-sm">
+        </div>
+    </div>
+
+    <div class="mt-6 flex gap-2">
+        <button type="submit" class="inline-flex items-center px-5 py-2.5 rounded-xl gradient-loot text-white text-sm font-bold shadow-cardLg hover:opacity-90">Save changes</button>
+        <button type="reset" class="inline-flex items-center px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-sm font-semibold text-loot-ink">Discard</button>
+    </div>
+</form>
 
 @push('scripts')
-    <script>
-        let accountUploadImg = $('#account-upload-img'),
-            accountUploadBtn = $('#account-upload'),
-            accountUserImage = $('.uploadedAvatar'),
-            accountResetBtn = $('#account-reset');
-
-
-        if (accountUserImage) {
-            let resetImage = accountUserImage.attr('src');
-            accountUploadBtn.on('change', function (e) {
-                let reader = new FileReader(),
-                    files = e.target.files;
-                reader.onload = function () {
-                    if (accountUploadImg) {
-                        accountUploadImg.attr('src', reader.result);
-                    }
-                };
-                reader.readAsDataURL(files[0]);
-            });
-
-            accountResetBtn.on('click', function () {
-                accountUserImage.attr('src', resetImage);
-            });
-        }
-    </script>
+<script>
+    const input = document.getElementById('account-upload');
+    const preview = document.getElementById('avatar-preview');
+    const reset = document.getElementById('avatar-reset');
+    const original = preview.src;
+    input?.addEventListener('change', e => {
+        const f = e.target.files[0]; if(!f) return;
+        const r = new FileReader();
+        r.onload = ev => preview.src = ev.target.result;
+        r.readAsDataURL(f);
+    });
+    reset?.addEventListener('click', () => { input.value=''; preview.src = original; });
+</script>
 @endpush
+@endsection

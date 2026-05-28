@@ -1,6 +1,6 @@
-@extends('layouts.admin')
+@extends('layouts.admin-modern')
 
-@section('title', "Manage Bonus")
+@section('title', "Bonus codes")
 
 @section('content')
     <div class="row" id="table-hover-row">

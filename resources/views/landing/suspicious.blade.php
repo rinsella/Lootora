@@ -1,33 +1,35 @@
-@extends('layouts.app')
-@section('title', 'Banned')
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suspicious activity · Lootora</title>
+<link rel="icon" href="{{ asset('app-assets/images/ico/favicon.png') }}">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>body{font-family:'Inter',ui-sans-serif,system-ui,sans-serif;background:#F8FAFC;color:#111827}.gradient-loot{background:linear-gradient(135deg,#16A34A 0%,#15803D 100%)}</style>
+</head>
+<body class="min-h-screen grid place-items-center px-6">
+<div class="max-w-lg w-full text-center">
+    <a href="{{ route('home') }}" class="inline-flex items-center gap-2 mb-8">
+        <div class="w-11 h-11 rounded-xl gradient-loot grid place-items-center text-white font-extrabold text-lg">L</div>
+        <span class="font-extrabold text-lg">Lootora</span>
+    </a>
 
-@section('content')
-    <div class="content-body">
-        <div class="misc-wrapper"><a class="brand-logo" href="javascript:void(0);">
-                <img src="{{ asset('app-assets/images/logo/logo2.png') }}" alt="">
-            </a>
-            <div class="misc-inner p-2 p-sm-3">
-                <div class="row w-100 text-center">
-                    <div class="col">
-                        <h2 class="mb-1">Suspicious Activity! 🚫</h2>
-                        <p class="mb-2">We have found suspicious activity in your account!</p>
-                        <a class="btn btn-danger btn-sm-block" href="{{ route('logout') }}"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout
-                        </a>
+    <div class="rounded-3xl bg-white border border-gray-200 p-8 sm:p-10 shadow-xl">
+        <div class="w-20 h-20 mx-auto rounded-2xl bg-amber-50 text-amber-600 grid place-items-center text-4xl mb-5">⚠️</div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900">Suspicious activity detected</h1>
+        <p class="mt-3 text-gray-600 text-sm">We've temporarily locked this account because we detected unusual behaviour or sign-in location. Please reach out to support to verify your identity and restore access.</p>
 
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-
-                        <div class="col">
-                            <img class="img-fluid" src="{{ asset('app-assets/images/pages/not-authorized-dark.svg') }}"
-                                 alt="Not authorized page"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="mt-6 flex flex-col sm:flex-row gap-2 justify-center">
+            <a href="mailto:support@lootora.net" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl gradient-loot text-white font-bold shadow-lg">Contact support</a>
+            <form action="{{ route('logout') }}" method="POST">@csrf
+                <button class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 font-semibold text-gray-900">Sign out</button>
+            </form>
         </div>
     </div>
-@endsection
 
+    <p class="mt-6 text-xs text-gray-500">© {{ date('Y') }} Lootora · support@lootora.net</p>
+</div>
+</body>
+</html>

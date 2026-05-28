@@ -1,58 +1,46 @@
-@extends('layouts.dashboard')
+@extends('layouts.member')
 
-@section('title', 'Live Leads')
+@section('title', 'Live leads')
 
 @section('content')
-    <div class="row" id="table-hover-row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Live Leads</h4>
-                </div>
+<div class="mb-5">
+    <h1 class="text-xl sm:text-2xl font-extrabold text-loot-ink">Live leads</h1>
+    <p class="text-sm text-loot-muted">Real-time feed of completions across the platform.</p>
+</div>
 
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>COMPANY</th>
-                            <th>NAME</th>
-                            <th>POINTS</th>
-                            <th>FINISHED ON</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($leads as $lead)
-                            <tr class="text-truncate">
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar" style="margin-right: 1.5rem; font-size: calc(12.8px);">
-                                            <img src="{{ $lead->user->avatar() }}"
-                                                 alt="Avatar" height="30" width="30">
-                                        </div>
-                                        <div>
-                                            <div class="font-weight-bolder">{{ $lead->user->username }}</div>
-                                            <div class="font-small-2 text-muted">
-                                                {{ $lead->user->email }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>{{ $lead->company }}</td>
-                                <td>{{ $lead->offer_name }}</td>
-                                <td>{{ $lead->offer_points }}</td>
-                                <td>{{ \Carbon\Carbon::createFromDate($lead->created_at)->diffForHumans() }}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+<div class="rounded-2xl bg-white border border-loot-border shadow-soft overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-gray-50">
+                <tr class="text-left text-xs uppercase tracking-wider text-loot-muted">
+                    <th class="px-5 py-3 font-semibold">User</th>
+                    <th class="px-5 py-3 font-semibold">Company</th>
+                    <th class="px-5 py-3 font-semibold">Offer</th>
+                    <th class="px-5 py-3 font-semibold text-right">Points</th>
+                    <th class="px-5 py-3 font-semibold text-right">When</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-loot-border">
+                @forelse($leads as $lead)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-5 py-3">
+                            <div class="flex items-center gap-3">
+                                <img src="{{ $lead->user?->avatar() }}" alt="" class="w-8 h-8 rounded-full object-cover">
+                                <div>
+                                    <p class="font-semibold text-loot-ink">{{ $lead->user?->username ?? '—' }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-5 py-3 text-loot-ink/80">{{ $lead->company }}</td>
+                        <td class="px-5 py-3 text-loot-ink/80">{{ $lead->offer_name }}</td>
+                        <td class="px-5 py-3 text-right font-bold text-loot-primary">+{{ number_format($lead->offer_points) }}</td>
+                        <td class="px-5 py-3 text-right text-xs text-loot-muted">{{ \Carbon\Carbon::parse($lead->created_at)->diffForHumans() }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="5" class="px-5 py-12 text-center text-loot-muted">No live activity yet.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
-
+</div>
 @endsection
-
-@push('scripts')
-
-@endpush

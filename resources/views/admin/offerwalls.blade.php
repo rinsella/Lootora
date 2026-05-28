@@ -1,6 +1,6 @@
-@extends('layouts.admin')
+@extends('layouts.admin-modern')
 
-@section('title', "Offerwalls manage")
+@section('title', "Offerwalls")
 
 @push('css')
     @livewireStyles

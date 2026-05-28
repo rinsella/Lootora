@@ -1,6 +1,6 @@
-@extends('layouts.admin')
+@extends('layouts.admin-modern')
 
-@section('title', "Withdrawals manage")
+@section('title', "Withdrawals")
 
 @push('css')
     @livewireStyles

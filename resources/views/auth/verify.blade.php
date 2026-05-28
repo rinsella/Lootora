@@ -1,51 +1,31 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
-@section('title', 'Verify Email Address')
+@section('title', 'Verify your email')
 
+@section('form')
+    <h1 class="text-2xl sm:text-3xl font-extrabold text-loot-ink">Verify your email 📧</h1>
+    <p class="mt-2 text-sm text-loot-muted">We've sent a verification link to your inbox. Open it to activate your Lootora account.</p>
 
-
-
-
-@section('content')
-    <!-- BEGIN: Content-->
-    <div class="app-content content ">
-        <div class="content-wrapper">
-            <div class="content-body">
-
-                <div class="auth-wrapper auth-basic px-2">
-                    <div class="auth-inner my-2" style="max-width: 600px;">
-                        <!-- Register basic -->
-                        <div class="card mb-0">
-                            <div class="card-body">
-                                <a href="{{ route('home') }}" class="brand-logo">
-                                    <img src="{{ asset('app-assets/images/logo/logo.png') }}" alt="" width="300px">
-                                </a>
-
-                                <h4 class="card-title mb-1">Verify Your Email Address 📧</h4>
-                                <p class="card-text mb-2">Before proceeding, please check your email for a verification
-                                    link.</p>
-
-                                @if (session('resent'))
-                                    <div class="alert alert-success">
-                                        <div class="alert-body">
-                                            <p>A fresh verification link has been sent to your email address.</p>
-                                        </div>
-                                    </div>
-                                @endif
-
-                                <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
-                                    @csrf
-                                    <button type="submit"
-                                            class="btn btn-link p-0 m-0 align-baseline">{{ __('click here to request another') }}</button>
-                                </form>
-                            </div>
-                        </div>
-                        <!-- /Register basic -->
-                    </div>
-                </div>
-
-            </div>
+    @if(session('resent'))
+        <div class="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-loot-primaryDark font-semibold">
+            ✓ A fresh verification link has been sent to your email address.
         </div>
+    @endif
+
+    <div class="mt-6 rounded-2xl border border-loot-border bg-white p-5">
+        <p class="text-sm text-loot-ink">Didn't get the email?</p>
+        <form method="POST" action="{{ route('verification.resend') }}" class="mt-3">
+            @csrf
+            <button type="submit" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl gradient-loot text-white font-semibold text-sm shadow-cardLg hover:opacity-95">
+                Resend verification email →
+            </button>
+        </form>
     </div>
-    <!-- END: Content-->
+
+    <div class="mt-6 text-sm text-center text-loot-muted">
+        Wrong account?
+        <form action="{{ route('logout') }}" method="POST" class="inline">@csrf
+            <button class="font-semibold text-loot-primary hover:underline">Sign out</button>
+        </form>
+    </div>
 @endsection

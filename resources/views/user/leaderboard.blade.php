@@ -1,88 +1,60 @@
-@extends('layouts.dashboard')
+@extends('layouts.member')
 
 @section('title', 'Leaderboard')
 
 @section('content')
-    <div class="row match-height">
-        <!-- Greetings Card starts -->
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <div class="card card-congratulations"
-                 style="background: linear-gradient(118deg, #00c753, rgb(115 103 240));">
+@php $top = $winners->first(); @endphp
 
-                <div class="card-body text-center">
-                    <img src="{{ asset('app-assets/images/elements/decore-left.png') }}"
-                         class="congratulations-img-left" alt="card-img-left"/>
-                    <img src="{{ asset('app-assets/images/elements/decore-right.png') }}"
-                         class="congratulations-img-right" alt="card-img-right"/>
-                    <div class="avatar avatar-xl bg-primary shadow">
-                        <div class="avatar-content">
-                            <img src="{{ $winners->first()?->avatar() }}" alt="{{ $winners->first()?->name() }}"
-                                 height="30" width="30">
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <h1 class="mb-1 text-white">Congratulations {{ $winners->first()?->username }},</h1>
-                        <p class="card-text m-auto w-75">
-                            You have done <strong>{{ $winners->first()?->total_points }} point</strong>, more points this
-                            year.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- Greetings Card ends -->
-    </div>
-
-    <div class="row" id="table-hover-row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Top Leaders</h4>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>User</th>
-                                <th>Points</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($winners as $winner)
-                                <tr class="text-truncate">
-                                    <td width="20">{{ $loop->iteration }}</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar" style="margin-right: 1.5rem; font-size: calc(12.8px);">
-                                                <img
-                                                    src="{{ $winner->avatar() }}" alt="{{ $winner->name()  }}"
-                                                    height="30" width="30">
-                                            </div>
-                                            <div>
-                                                <div class="font-weight-bolder">{{ $winner->username }}</div>
-                                                <div class="font-small-2 text-muted">
-                                                    {{ $winner->firstname . ' ' . $winner->lastname }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>{{ $winner->total_points }}</td>
-                                </tr>
-                            @endforeach
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+@if($top)
+<div class="rounded-2xl gradient-loot p-6 sm:p-8 text-white shadow-cardLg mb-6 relative overflow-hidden">
+    <div class="absolute -right-12 -top-12 w-56 h-56 rounded-full bg-white/10"></div>
+    <div class="absolute -left-10 -bottom-10 w-48 h-48 rounded-full bg-white/5"></div>
+    <div class="relative z-10 flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
+        <img src="{{ $top->avatar() }}" alt="{{ $top->username }}" class="w-20 h-20 rounded-2xl ring-4 ring-white/30 object-cover">
+        <div class="flex-1">
+            <p class="text-xs uppercase tracking-wider text-emerald-100 font-bold">🏆 Champion this period</p>
+            <h1 class="text-2xl sm:text-3xl font-extrabold mt-1">Congrats, {{ $top->username }}!</h1>
+            <p class="text-emerald-100 text-sm mt-1">{{ number_format($top->total_points) }} $LOOT earned.</p>
         </div>
     </div>
+</div>
+@endif
 
+<div class="rounded-2xl bg-white border border-loot-border shadow-soft overflow-hidden">
+    <div class="px-5 py-4 border-b border-loot-border flex items-center justify-between">
+        <h3 class="font-bold text-loot-ink">Top earners</h3>
+        <span class="text-xs text-loot-muted">{{ $winners->count() }} entries</span>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-gray-50">
+                <tr class="text-left text-xs uppercase tracking-wider text-loot-muted">
+                    <th class="px-5 py-3 font-semibold w-16">Rank</th>
+                    <th class="px-5 py-3 font-semibold">User</th>
+                    <th class="px-5 py-3 font-semibold text-right">Points</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-loot-border">
+                @forelse($winners as $winner)
+                    @php $medal = ['🥇','🥈','🥉'][$loop->index] ?? '#'.($loop->iteration); @endphp
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-5 py-3 font-bold text-loot-ink">{{ $medal }}</td>
+                        <td class="px-5 py-3">
+                            <div class="flex items-center gap-3">
+                                <img src="{{ $winner->avatar() }}" alt="" class="w-9 h-9 rounded-full object-cover">
+                                <div>
+                                    <p class="font-semibold text-loot-ink">{{ $winner->username }}</p>
+                                    <p class="text-xs text-loot-muted">{{ trim(($winner->firstname ?? '').' '.($winner->lastname ?? '')) ?: '—' }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-5 py-3 text-right font-bold text-loot-primary">{{ number_format($winner->total_points) }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="3" class="px-5 py-12 text-center text-loot-muted">No leaders yet.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection
-
-@push('scripts')
-
-@endpush

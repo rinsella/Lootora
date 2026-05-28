@@ -1,6 +1,6 @@
-@extends('layouts.admin')
+@extends('layouts.admin-modern')
 
-@section('title', "Payments manage")
+@section('title', "Payment Pricing")
 
 @push('css')
     @livewireStyles
